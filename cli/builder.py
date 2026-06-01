@@ -60,18 +60,31 @@ def builder():
     """A template file manager with PY"""
     pass
 
+# added in version 0.2.0
+@click.command("templates")
+def showTemplates():
+    """shows existing templates"""
+    templates = os.listdir(TEMPLATE_DIR)
+    info(f"Available templates:")
+    for template in templates:
+        click.echo(f"- {template}")
+
+
+# main command
+# added in base version(0.1.0)
 @click.command("new")
 @click.option('--template', '-t', required=True, help="the chosen template, like pure-python.")
 @click.option('--name', '-n', required=True, help="the project name.")
 @click.option('--path', '-p', default=".", help="the project path. default is '.'.")
 @click.option('--git', '-g', is_flag=True, help="using git init.")
 def create_project_command(template, name, path, git):
+    """the main command to create new project"""
     success = create_project_logic(template, name, path, git)
     if not success:
         exit(1)
 
 builder.add_command(create_project_command)
-
+builder.add_command(showTemplates)
 def main():
     builder()
 
